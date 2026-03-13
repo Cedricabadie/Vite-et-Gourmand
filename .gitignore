@@ -1,0 +1,17 @@
+# Dépendances
+vendor/
+node_modules/
+
+# Configuration locale (ne jamais committer les vraies valeurs)
+includes/config.local.php
+.env
+
+# Uploads utilisateurs
+assets/img/uploads/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
