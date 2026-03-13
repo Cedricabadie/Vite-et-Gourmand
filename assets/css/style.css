@@ -2,34 +2,574 @@
    Vite & Gourmand – Feuille de style principale
    ============================================= */
 
-/* Variables (charte graphique à définir) */
+
+/* ======================
+   1. VARIABLES CSS
+   ====================== */
+/*
+   :root = la racine du document HTML (l'élément <html>).
+   On y définit des variables CSS (--nom-variable: valeur).
+   Avantage : si on veut changer une couleur, on la change
+   ici UNE SEULE FOIS et ça se répercute partout.
+*/
 :root {
-    --color-primary:   #c0392b;
-    --color-secondary: #e67e22;
-    --color-dark:      #2c3e50;
-    --color-light:     #ecf0f1;
-    --color-white:     #ffffff;
-    --font-main:       'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Couleurs */
+    --couleur-principale:   #8B1A1A;  /* Rouge bordeaux foncé */
+    --couleur-accentuation: #C0392B;  /* Rouge plus vif */
+    --couleur-doree:        #D4A853;  /* Or/doré pour les accents chauds */
+    --couleur-sombre:       #1C1C1C;  /* Presque noir pour les textes */
+    --couleur-gris:         #555555;  /* Gris pour les textes secondaires */
+    --couleur-gris-clair:   #F5F5F5;  /* Gris très clair pour les fonds */
+    --couleur-blanc:        #FFFFFF;
+
+    /* Typographie */
+    --police-titres: 'Georgia', 'Times New Roman', serif; /* Serif = élégant, gastronomique */
+    --police-texte:  'Segoe UI', Tahoma, Geneva, sans-serif; /* Sans-serif = lisible */
+
+    /* Espacements : multiples de 8px (bonne pratique) */
+    --espacement-xs:  0.5rem;  /*  8px */
+    --espacement-s:   1rem;    /* 16px */
+    --espacement-m:   1.5rem;  /* 24px */
+    --espacement-l:   2rem;    /* 32px */
+    --espacement-xl:  3rem;    /* 48px */
+    --espacement-xxl: 5rem;    /* 80px */
+
+    /* Ombres */
+    --ombre-carte:       0 4px 20px rgba(0, 0, 0, 0.08);
+    --ombre-carte-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+
+    /* Bordures arrondies */
+    --rayon-bordure: 8px;
+
+    /* Transitions (animations douces au survol) */
+    --transition: 0.3s ease;
 }
 
-/* Reset de base */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ======================
+   2. RESET & BASE
+   ====================== */
+/*
+   "Reset" = on annule les styles par défaut du navigateur.
+   Chaque navigateur (Chrome, Firefox, Safari) applique ses
+   propres marges/paddings. On repart de zéro.
+*/
+*, *::before, *::after {
+    /* box-sizing: border-box = padding et border INCLUS dans la largeur.
+       C'est LE réglage indispensable en CSS moderne. */
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
-    font-family: var(--font-main);
-    color: var(--color-dark);
-    background: var(--color-white);
+    font-family: var(--police-texte);
+    color: var(--couleur-sombre);
+    background-color: var(--couleur-blanc);
+    /* line-height : espacement entre les lignes. 1.6 = aéré et lisible */
     line-height: 1.6;
+    font-size: 1rem; /* 16px par défaut */
 }
 
-/* Accessibilité – focus visible (RGAA) */
-:focus { outline: 3px solid var(--color-secondary); outline-offset: 2px; }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-/* Navigation */
-header nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: var(--color-dark); }
-header nav a { color: var(--color-white); text-decoration: none; }
-header nav ul { list-style: none; display: flex; gap: 1.5rem; }
+ul, ol {
+    list-style: none;
+}
 
-/* Footer */
-footer { background: var(--color-dark); color: var(--color-light); padding: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
-footer a { color: var(--color-secondary); }
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* ======================
+   3. ACCESSIBILITÉ (RGAA)
+   ====================== */
+/*
+   RGAA = Référentiel Général d'Amélioration de l'Accessibilité.
+   OBLIGATOIRE pour l'ECF.
+*/
+
+/* Focus visible : navigation clavier (touche Tab) */
+:focus-visible {
+    outline: 3px solid var(--couleur-doree);
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+/* sr-only = "Screen Reader Only"
+   Texte invisible à l'écran mais lu par les lecteurs d'écran */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Lien "passer au contenu" pour navigation clavier */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: var(--espacement-s);
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    padding: var(--espacement-xs) var(--espacement-s);
+    border-radius: var(--rayon-bordure);
+    z-index: 1000;
+    transition: top var(--transition);
+}
+.skip-link:focus {
+    top: var(--espacement-s);
+}
+
+
+/* ======================
+   4. COMPOSANTS RÉUTILISABLES
+   ====================== */
+
+/* BOUTONS
+   Convention BEM : .btn = bloc, .btn--principal = modificateur */
+.btn {
+    display: inline-block;
+    padding: var(--espacement-xs) var(--espacement-m);
+    border-radius: var(--rayon-bordure);
+    font-family: var(--police-texte);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background-color var(--transition),
+                color var(--transition),
+                border-color var(--transition),
+                transform var(--transition);
+}
+
+.btn:hover {
+    transform: translateY(-2px); /* monte légèrement au survol */
+}
+
+.btn--principal {
+    background-color: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    border-color: var(--couleur-principale);
+}
+.btn--principal:hover {
+    background-color: var(--couleur-accentuation);
+    border-color: var(--couleur-accentuation);
+}
+
+.btn--secondaire {
+    background-color: transparent;
+    color: var(--couleur-blanc);
+    border-color: var(--couleur-blanc);
+}
+.btn--secondaire:hover {
+    background-color: var(--couleur-blanc);
+    color: var(--couleur-principale);
+}
+
+.btn--grand {
+    padding: var(--espacement-s) var(--espacement-xl);
+    font-size: 1.1rem;
+}
+
+/* TITRES DE SECTION */
+.section__titre {
+    font-family: var(--police-titres);
+    font-size: 2rem;
+    color: var(--couleur-principale);
+    text-align: center;
+    margin-bottom: var(--espacement-xs);
+}
+
+.section__sous-titre {
+    text-align: center;
+    color: var(--couleur-gris);
+    font-size: 1.1rem;
+    margin-bottom: var(--espacement-xl);
+}
+
+
+/* ======================
+   5. NAVIGATION (HEADER)
+   ====================== */
+
+header {
+    background-color: var(--couleur-sombre);
+    position: sticky; /* reste en haut lors du défilement */
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between; /* logo à gauche, liens à droite */
+    align-items: center;
+    padding: var(--espacement-s) var(--espacement-xl);
+    max-width: 1200px;
+    margin: 0 auto; /* centrage horizontal */
+}
+
+header nav > a {
+    font-family: var(--police-titres);
+    font-size: 1.5rem;
+    color: var(--couleur-blanc);
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+header nav ul {
+    display: flex;
+    gap: var(--espacement-m);
+    align-items: center;
+}
+
+header nav ul a {
+    color: var(--couleur-blanc);
+    font-size: 0.95rem;
+    padding: var(--espacement-xs);
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--transition), color var(--transition);
+}
+
+header nav ul a:hover {
+    color: var(--couleur-doree);
+    border-bottom-color: var(--couleur-doree);
+}
+
+
+/* ======================
+   6. SECTION HERO
+   ====================== */
+
+.hero {
+    min-height: 90vh; /* au moins 90% de la hauteur de l'écran */
+    background:
+        linear-gradient(
+            135deg,
+            rgba(28, 28, 28, 0.92) 0%,
+            rgba(139, 26, 26, 0.85) 100%
+        ),
+        #1C1C1C;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--espacement-xxl) var(--espacement-l);
+}
+
+.hero__contenu {
+    max-width: 700px;
+}
+
+.hero__contenu h1 {
+    font-family: var(--police-titres);
+    /* clamp(min, préféré, max) = taille fluide selon l'écran */
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--couleur-blanc);
+    margin-bottom: var(--espacement-s);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.hero__esperluette {
+    color: var(--couleur-doree);
+}
+
+.hero__accroche {
+    font-size: 1.3rem;
+    color: var(--couleur-doree);
+    font-style: italic;
+    margin-bottom: var(--espacement-m);
+    letter-spacing: 1px;
+}
+
+.hero__description {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: var(--espacement-xl);
+    line-height: 1.8;
+}
+
+.hero__actions {
+    display: flex;
+    gap: var(--espacement-s);
+    justify-content: center;
+    flex-wrap: wrap; /* passe à la ligne sur mobile */
+}
+
+
+/* ======================
+   7. SECTION PRÉSENTATION
+   ====================== */
+
+.presentation {
+    padding: var(--espacement-xxl) var(--espacement-l);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.presentation__contenu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes égales */
+    gap: var(--espacement-l);
+}
+
+.carte-presentation {
+    background-color: var(--couleur-blanc);
+    border: 1px solid #E8E8E8;
+    border-radius: var(--rayon-bordure);
+    padding: var(--espacement-l);
+    text-align: center;
+    box-shadow: var(--ombre-carte);
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.carte-presentation:hover {
+    box-shadow: var(--ombre-carte-hover);
+    transform: translateY(-4px);
+}
+
+.carte-presentation__icone {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: var(--espacement-s);
+}
+
+.carte-presentation h3 {
+    font-family: var(--police-titres);
+    font-size: 1.3rem;
+    color: var(--couleur-principale);
+    margin-bottom: var(--espacement-s);
+}
+
+.carte-presentation p {
+    color: var(--couleur-gris);
+    line-height: 1.7;
+}
+
+
+/* ======================
+   8. SECTION CHIFFRES CLÉS
+   ====================== */
+
+.chiffres {
+    background-color: var(--couleur-principale);
+    padding: var(--espacement-xl) var(--espacement-l);
+}
+
+.chiffres__liste {
+    display: flex;
+    justify-content: center;
+    gap: var(--espacement-xxl);
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.chiffres__item {
+    text-align: center;
+    color: var(--couleur-blanc);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chiffres__nombre {
+    font-family: var(--police-titres);
+    font-size: 3rem;
+    color: var(--couleur-doree);
+    line-height: 1;
+    margin-bottom: var(--espacement-xs);
+}
+
+.chiffres__label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+/* ======================
+   9. SECTION AVIS CLIENTS
+   ====================== */
+
+.avis {
+    background-color: var(--couleur-gris-clair);
+    padding: var(--espacement-xxl) var(--espacement-l);
+}
+
+.avis__liste {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--espacement-l);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.carte-avis {
+    background-color: var(--couleur-blanc);
+    border-radius: var(--rayon-bordure);
+    padding: var(--espacement-l);
+    box-shadow: var(--ombre-carte);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacement-s);
+}
+
+.carte-avis__etoiles {
+    font-size: 1.3rem;
+    color: var(--couleur-doree);
+    letter-spacing: 3px;
+}
+
+.carte-avis__commentaire p {
+    color: var(--couleur-gris);
+    font-style: italic;
+    line-height: 1.8;
+    quotes: "\00AB\00A0" "\00A0\00BB";
+}
+.carte-avis__commentaire p::before { content: open-quote; }
+.carte-avis__commentaire p::after  { content: close-quote; }
+
+.carte-avis__auteur {
+    margin-top: auto; /* pousse l'auteur en bas de la carte */
+    border-top: 1px solid #EEEEEE;
+    padding-top: var(--espacement-s);
+}
+
+.carte-avis__auteur cite {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--couleur-principale);
+}
+
+
+/* ======================
+   10. SECTION CTA FINALE
+   ====================== */
+
+.cta-finale {
+    background-color: var(--couleur-sombre);
+    color: var(--couleur-blanc);
+    text-align: center;
+    padding: var(--espacement-xxl) var(--espacement-l);
+}
+
+.cta-finale h2 {
+    font-family: var(--police-titres);
+    font-size: 2rem;
+    margin-bottom: var(--espacement-s);
+    color: var(--couleur-doree);
+}
+
+.cta-finale p {
+    font-size: 1.1rem;
+    opacity: 0.85;
+    margin-bottom: var(--espacement-l);
+}
+
+
+/* ======================
+   11. FOOTER
+   ====================== */
+
+footer {
+    background-color: #111111;
+    color: var(--couleur-gris-clair);
+    padding: var(--espacement-xl) var(--espacement-l);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--espacement-l);
+}
+
+footer h2 {
+    font-family: var(--police-titres);
+    font-size: 1.1rem;
+    color: var(--couleur-doree);
+    margin-bottom: var(--espacement-s);
+}
+
+.footer-horaires ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacement-xs);
+}
+
+footer a {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    transition: color var(--transition);
+}
+
+footer a:hover {
+    color: var(--couleur-doree);
+}
+
+
+/* ======================
+   12. RESPONSIVE (MOBILE)
+   ====================== */
+/*
+   @media = "media query" : règles CSS qui s'activent
+   seulement à certaines tailles d'écran.
+   max-width: 768px = écrans de 768px ou moins (tablettes/mobiles)
+*/
+
+@media (max-width: 768px) {
+
+    .presentation__contenu,
+    .avis__liste {
+        grid-template-columns: 1fr; /* 1 seule colonne sur mobile */
+    }
+
+    .chiffres__liste {
+        gap: var(--espacement-l);
+    }
+    .chiffres__item {
+        width: 40%;
+    }
+
+    header nav {
+        padding: var(--espacement-s);
+        flex-wrap: wrap;
+        gap: var(--espacement-s);
+    }
+
+    header nav ul {
+        gap: var(--espacement-s);
+        font-size: 0.85rem;
+    }
+
+    .hero__contenu h1 {
+        font-size: 2rem;
+    }
+
+    .hero__actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
