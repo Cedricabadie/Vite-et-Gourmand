@@ -1,0 +1,35 @@
+/* =============================================
+   Vite & Gourmand – Feuille de style principale
+   ============================================= */
+
+/* Variables (charte graphique à définir) */
+:root {
+    --color-primary:   #c0392b;
+    --color-secondary: #e67e22;
+    --color-dark:      #2c3e50;
+    --color-light:     #ecf0f1;
+    --color-white:     #ffffff;
+    --font-main:       'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Reset de base */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--font-main);
+    color: var(--color-dark);
+    background: var(--color-white);
+    line-height: 1.6;
+}
+
+/* Accessibilité – focus visible (RGAA) */
+:focus { outline: 3px solid var(--color-secondary); outline-offset: 2px; }
+
+/* Navigation */
+header nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: var(--color-dark); }
+header nav a { color: var(--color-white); text-decoration: none; }
+header nav ul { list-style: none; display: flex; gap: 1.5rem; }
+
+/* Footer */
+footer { background: var(--color-dark); color: var(--color-light); padding: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+footer a { color: var(--color-secondary); }
