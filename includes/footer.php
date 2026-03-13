@@ -1,4 +1,4 @@
-<footer role="contentinfo">
+<footer class="site-footer" role="contentinfo">
     <div class="footer-horaires">
         <h2>Nos horaires</h2>
         <?php

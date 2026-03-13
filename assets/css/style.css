@@ -487,8 +487,14 @@ header nav ul a:hover {
 /* ======================
    11. FOOTER
    ====================== */
-
-footer {
+/*
+   On cible .site-footer et NON pas "footer" tout seul.
+   Pourquoi ? Parce que <footer> est aussi utilisé dans les
+   cartes d'avis (.carte-avis__auteur). Si on écrit juste
+   "footer { background: #111 }", ça s'applique PARTOUT.
+   Toujours être précis avec ses sélecteurs CSS.
+*/
+.site-footer {
     background-color: #111111;
     color: var(--couleur-gris-clair);
     padding: var(--espacement-xl) var(--espacement-l);
@@ -499,7 +505,7 @@ footer {
     gap: var(--espacement-l);
 }
 
-footer h2 {
+.site-footer h2 {
     font-family: var(--police-titres);
     font-size: 1.1rem;
     color: var(--couleur-doree);
@@ -519,13 +525,13 @@ footer h2 {
     gap: var(--espacement-xs);
 }
 
-footer a {
+.site-footer a {
     color: rgba(255,255,255,0.7);
     font-size: 0.9rem;
     transition: color var(--transition);
 }
 
-footer a:hover {
+.site-footer a:hover {
     color: var(--couleur-doree);
 }
 
